@@ -1,5 +1,6 @@
-import pygame,sys,random
+import pygame, sys, random
 from pygame.math import Vector2
+from pygame import *
 
 
 
