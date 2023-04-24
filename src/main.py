@@ -6,11 +6,11 @@ from pygame import *
 
 class PLAYER_1:
 	def __init__(self):
-		self.player_1_x = 5
-		self.player_1_y = 21
+		self.player_1_x = 100
+		self.player_1_y = 420
 		self.player_pos = (self.player_1_x,self.player_1_y)
 	def draw_player_1(self):
-		player_1_rect = pygame.Rect(int(self.player_1_x*cell_size),int(self.player_1_y*cell_size),120,150)
+		player_1_rect = pygame.Rect(int(self.player_1_x),int(self.player_1_y),120,150)
 		screen.blit(player_1_graphics,player_1_rect)
 		# pygame.draw.rect(screen,"red",player_1_rect)
 
@@ -20,10 +20,10 @@ class PLAYER_1:
 
 class PLAYER_2:
 	def __init__(self):
-		self.player_2_x = 50
-		self.player_2_y = 21
+		self.player_2_x = 1000
+		self.player_2_y = 420
 	def draw_player_2(self):
-		player_2_rect = pygame.Rect(int(self.player_2_x*cell_size),int(self.player_2_y*cell_size),120,150)
+		player_2_rect = pygame.Rect(int(self.player_2_x),int(self.player_2_y),120,150)
 		screen.blit(player_2_graphics,player_2_rect)
 		# pygame.draw.rect(screen,"blue",player_2_rect)
 		
@@ -34,13 +34,12 @@ class PLAYER_2:
 class ATTACK:
 	def __init__(self):
 		self.player_1 = PLAYER_1()
-		self.orb_x = self.player_1.player_1_x
-		self.orb_y = self.player_1.player_1_y
+		self.orb_x = self.player_1.player_1_x + (self.player_1.player_1_x/2)
+		self.orb_y = self.player_1.player_1_y + (self.player_1.player_1_y/2)
 	def attack_1(self):
-		orb = pygame.Rect((self.orb_x+(self.orb_x/2)),(self.orb_y+(self.orb_y/2)),20,20)
+		orb = pygame.Rect(200,200,200,200)
 		pygame.draw.rect(screen,"yellow",orb)
-		# while self.orb_y<99:
-		# 	self.orb_x += 4
+		
 			
 		
 
@@ -56,7 +55,6 @@ class MAIN():
 
 
 pygame.init()
-cell_size = 20
 screen = pygame.display.set_mode((1200,600))
 ground = pygame.image.load('graphics/ground.jpeg').convert()
 sky = pygame.image.load('graphics/sky.png').convert()
@@ -73,7 +71,8 @@ player_2_gravity = 0
 main = MAIN()
 player_1 = PLAYER_1()
 player_2 = PLAYER_2()
-attack = ATTACK()			
+attack = ATTACK()	
+attack_value = False		
 
 
 
@@ -86,29 +85,33 @@ while True:
 			main.update()
 		
 		keys = pygame.key.get_pressed()	
-		if keys[pygame.K_RIGHT] and player_1.player_1_x < 56 :
-				player_1.player_1_x += 2
-		if keys[pygame.K_LEFT] and player_1.player_1_x > 2 :
-				player_1.player_1_x -= 2
-		if keys[pygame.K_d] and player_2.player_2_x < 56:
-				player_2.player_2_x += 2
-		if keys[pygame.K_a] and player_2.player_2_x > 1:
-				player_2.player_2_x -= 2	
+		if keys[pygame.K_RIGHT] and player_1.player_1_x < 1120 :
+				player_1.player_1_x += 35
+		if keys[pygame.K_LEFT] and player_1.player_1_x > 40 :
+				player_1.player_1_x -= 35
+		if keys[pygame.K_d] and player_2.player_2_x < 1120:
+				player_2.player_2_x += 35
+		if keys[pygame.K_a] and player_2.player_2_x > 10:
+				player_2.player_2_x -= 35	
 		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_UP and player_1.player_1_y > 15 :
-				player_1_gravity = -4
-			if event.key == pygame.K_w and player_2.player_2_y > 15:
-				player_2_gravity = -4
+			if event.key == pygame.K_UP and player_1.player_1_y > 300 :
+				player_1_gravity = -30
+			if event.key == pygame.K_w and player_2.player_2_y > 300:
+				player_2_gravity = -30
 			if event.key == pygame.K_RCTRL:
-				attack.attack_1()
+				attack_value = True
  	
-
-	player_1_gravity += 0.5
-	player_2_gravity += 0.5
+	attack.attack_1()
+	player_1_gravity += 2
+	player_2_gravity += 2
 	player_1.player_1_y += player_1_gravity
 	player_2.player_2_y += player_2_gravity
-	if player_1.player_1_y >= 21 : player_1.player_1_y = 21
-	if player_2.player_2_y >= 21 : player_2.player_2_y = 21
+	if player_1.player_1_y >= 420 : player_1.player_1_y = 420
+	if player_2.player_2_y >= 420 : player_2.player_2_y = 420
+	if attack_value == True:
+		attack.attack_1()
+		# attack.orb_x += 1
+	
 	screen.blit(sky,(0,0))
 	screen.blit(ground,(0,550))			
 	player_1.draw_player_1()
