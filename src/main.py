@@ -34,11 +34,13 @@ class PLAYER_2:
 class ATTACK:
 	def __init__(self):
 		self.player_1 = PLAYER_1()
-		self.orb_x = self.player_1.player_1_x + (self.player_1.player_1_x/2)
-		self.orb_y = self.player_1.player_1_y + (self.player_1.player_1_y/2)
+		self.orb_x = self.player_1.player_1_x + 120
+		self.orb_y = self.player_1.player_1_y + 75
 	def attack_1(self):
-		orb = pygame.Rect(200,200,200,200)
-		pygame.draw.rect(screen,"yellow",orb)
+		orb = pygame.Rect(self.orb_x,self.orb_y,40,40)
+		screen.blit(orb_graphics,orb)
+		# pygame.draw.rect(screen,"yellow",orb)
+		
 		
 			
 		
@@ -64,6 +66,7 @@ pygame.time.set_timer(screen_update,150)
 
 player_1_graphics = pygame.image.load('graphics/player1.png').convert_alpha()
 player_2_graphics = pygame.image.load('graphics/player2.png').convert_alpha()
+orb_graphics = pygame.image.load('graphics/rasengan.png').convert_alpha()
 
 player_1_gravity = 0
 player_2_gravity = 0
@@ -101,22 +104,25 @@ while True:
 			if event.key == pygame.K_RCTRL:
 				attack_value = True
  	
-	attack.attack_1()
+	
 	player_1_gravity += 2
 	player_2_gravity += 2
 	player_1.player_1_y += player_1_gravity
 	player_2.player_2_y += player_2_gravity
 	if player_1.player_1_y >= 420 : player_1.player_1_y = 420
 	if player_2.player_2_y >= 420 : player_2.player_2_y = 420
-	if attack_value == True:
-		attack.attack_1()
-		# attack.orb_x += 1
 	
-	screen.blit(sky,(0,0))
+	screen.blit(sky,(0,0)) 
 	screen.blit(ground,(0,550))			
 	player_1.draw_player_1()
-	player_2.draw_player_2()
-	# attack.attack_1()			
+	player_2.draw_player_2()			
+	if attack_value == True:
+		attack.attack_1()
+		attack.orb_x += 8
+		if attack.orb_x > 1200:
+			attack_value = False
+			attack.orb_x = player_1.player_1_x + 120
+		
 	pygame.display.update()
 	clock.tick(60)
 
