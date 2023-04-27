@@ -26,23 +26,35 @@ class PLAYER_2:
 		player_2_rect = pygame.Rect(int(self.player_2_x),int(self.player_2_y),120,150)
 		screen.blit(player_2_graphics,player_2_rect)
 		# pygame.draw.rect(screen,"blue",player_2_rect)
-		
-	
 
 
 
-class ATTACK:
+
+class ATTACK_1:
 	def __init__(self):
 		self.player_1 = PLAYER_1()
-		self.orb_x = self.player_1.player_1_x + 120
-		self.orb_y = self.player_1.player_1_y + 75
-	def attack_1(self):
-		orb = pygame.Rect(self.orb_x,self.orb_y,40,40)
-		screen.blit(orb_graphics,orb)
+		self.orb_x_1 = self.player_1.player_1_x + 120
+		self.orb_y_1 = self.player_1.player_1_y + 75
+	def attack(self):
+		orbplayer1 = pygame.Rect(self.orb_x_1,self.orb_y_1,40,40)
+		screen.blit(orb_graphics,orbplayer1)
 		# pygame.draw.rect(screen,"yellow",orb)
-		
+	# def attack_2(self):
+	# 	orbplayer2 = pygame.Rect(self.orb_x_2,self.orb_y_2,40,40)
+	# 	screen.blit(orb_graphics,orbplayer2)
+	# 	# pygame.draw.rect(screen,"yellow",orb)	
 		
 			
+class ATTACK_2:
+	def __init__(self):
+		self.player_2 = PLAYER_2()
+		self.orb_x_2 = self.player_2.player_2_x - 120
+		self.orb_y_2 = self.player_2.player_2_y + 75
+	def attack(self):
+		orbplayer2 = pygame.Rect(self.orb_x_2,self.orb_y_2,40,40)
+		screen.blit(orb_graphics,orbplayer2)
+		# pygame.draw.rect(screen,"yellow",orb)	
+	
 		
 
 
@@ -50,8 +62,9 @@ class MAIN():
 	def __init__(self):
 		self.player_1 = PLAYER_1()
 		self.player_2 = PLAYER_2()
-		self.attack = ATTACK()
-	
+		self.attack1 = ATTACK_1()
+		self.attack2 = ATTACK_2()
+
 	def update(self):
 		pass
 
@@ -74,9 +87,10 @@ player_2_gravity = 0
 main = MAIN()
 player_1 = PLAYER_1()
 player_2 = PLAYER_2()
-attack = ATTACK()	
-attack_value = False		
-
+attack1 = ATTACK_1()
+attack2 = ATTACK_2()	
+attack_value_player1 = False		
+attack_value_player2 = False
 
 
 while True:
@@ -102,8 +116,9 @@ while True:
 			if event.key == pygame.K_w and player_2.player_2_y > 300:
 				player_2_gravity = -30
 			if event.key == pygame.K_RCTRL:
-				attack_value = True
- 	
+				attack_value_player1 = True
+			if event.key == pygame.K_LCTRL:
+				attack_value_player2 = True
 	
 	player_1_gravity += 2
 	player_2_gravity += 2
@@ -116,13 +131,19 @@ while True:
 	screen.blit(ground,(0,550))			
 	player_1.draw_player_1()
 	player_2.draw_player_2()			
-	if attack_value == True:
-		attack.attack_1()
-		attack.orb_x += 8
-		if attack.orb_x > 1200:
-			attack_value = False
-			attack.orb_x = player_1.player_1_x + 120
+	if attack_value_player1 == True:
+		attack1.attack()
+		attack1.orb_x_1 += 8
+		if attack1.orb_x_1 > 1200:
+			attack_value_player1 = False
+			attack1.orb_x_1 = player_1.player_1_x + 120
 		
+	if attack_value_player2 == True:
+		attack2.attack()
+		attack2.orb_x_2 -= 8
+		if attack2.orb_x_2 < 20:
+			attack_value_player2 = False
+			attack2.orb_x_2 = player_2.player_2_x - 120
 	pygame.display.update()
 	clock.tick(60)
 
@@ -130,5 +151,4 @@ while True:
 
 
 		    			
-	
 	
