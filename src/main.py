@@ -1,19 +1,44 @@
-import pygame, sys, random
-from pygame.math import Vector2
+import pygame, sys
 from pygame import *
 
 
 class PLAYER:
     def __init__(self,x,y):
-      
         self.rect = pygame.Rect(x,y,120,150)
+        self.attacking = False
+        self.health = 100
+        self.face = 0
+        self.attacking = False
 
     def draw(self,player_image):
        screen.blit(player_image,self.rect)
 
-    # def attack( ):
-
+    def attack(self,surface,target):
+        self.attacking = True
+        attack_rect = pygame.Rect(self.rect.centerx - (1.5 * self.rect.width * self.face),self.rect.y,self.rect.width *1.5,self.rect.height)
+        if attack_rect.colliderect(target.rect):
+            target.health -= 10
         
+        pygame.draw.rect(surface,'green',attack_rect)
+
+
+    def update(self,surface,target):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_d] and self.rect.right < 1190:
+            self.rect.centerx += 20
+        if keys[pygame.K_a] and self.rect.left > 30:
+            self.rect.centerx -= 20
+        if keys[pygame.K_RIGHT] and self.rect.right < 1190:
+            self.rect.centerx += 20
+        if keys[pygame.K_LEFT] and self.rect.left > 10:
+            self.rect.centerx -= 20
+        if self.attacking == False:    
+            if keys[pygame.K_e]:
+                self.attack(surface,target)
+        
+        if target.rect.centerx > self.rect.centerx: self.face = 0
+        else: self.face = 1
+
 
 # class PLAYER_2:
 #     def __init__(self):
@@ -74,18 +99,23 @@ player_1_attack = pygame.image.load("graphics/player_1_knife.png").convert_alpha
 player_2_attack = pygame.image.load("graphics/player_2_knife.png").convert_alpha()
 orb_graphics = pygame.image.load("graphics/rasengan.png").convert_alpha()
 
+player_1 = PLAYER(100,420)
+player_2 = PLAYER(1000,420)
 # player_1_gravity = 0
 # player_2_gravity = 0
 
 # main = MAIN()
-player_1 = PLAYER(100,420)
-player_2 = PLAYER(1000,420)
 # attack1 = ATTACK_1()
 # # attack2 = ATTACK_2()
 # orb_attack_p1 = False
 # orb_attack_p2 = False
 # player_attack_p1 = False
 
+def draw_health(health,x,y):
+    loss = health/100
+    pygame.draw.rect(sky,'white',(x-2,y-2,504,34))
+    pygame.draw.rect(sky,'red',(x,y,500,30))
+    pygame.draw.rect(sky,'green',(x,y,500 * loss,30))
 
 while True:
     for event in pygame.event.get():
@@ -95,39 +125,16 @@ while True:
         # if event.type == screen_update:
         #     main.update()
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_d] and player_1.rect.right < 1120:
-            player_1.rect.centerx += 35
-        if keys[pygame.K_a] and player_1.rect.left > 40:
-            player_1.rect.centerx -= 35
-        if keys[pygame.K_RIGHT] and player_2.rect.right < 1120:
-            player_2.rect.centerx += 35
-        if keys[pygame.K_LEFT] and player_2.rect.left > 10:
-            player_2.rect.centerx -= 35
+    screen.blit(sky,(0,0))
+    screen.blit(ground, (0, 550))
 
-        # if event.type == pygame.KEYDOWN:
-        #     if event.key == pygame.K_w and player_1.player_1_y > 300:
-        #         player_1_gravity = -30
-        #     if event.key == pygame.K_UP and player_2.player_2_y > 300:
-        #         player_2_gravity = -30
-        #     if event.key == pygame.K_LCTRL:
-        #         orb_attack_p1 = True
-        #     if event.key == pygame.K_RCTRL:
-        #         orb_attack_p2 = True
-        #     if event.key == pygame.K_LSHIFT:
-        #         player_attack_p1 == True
+    draw_health(player_1.health,20,20)
+    draw_health(player_2.health,680,20)
 
-    # player_1_gravity += 2
-    # player_2_gravity += 2
-    # player_1.y += player_1_gravity
-    # player_2.y += player_2_gravity
-    # if player_1.y >= 420:
-    #     player_1.y = 420
-    # if player_2.y >= 420:
-    #     player_2.y = 420
 
-    # screen.blit(sky,(0,0))
-    # screen.blit(ground, (0, 550))
+    player_1.update(screen,player_2)
+    player_2.update(screen,player_1)
+
     player_1.draw(player_1_graphics)
     player_2.draw(player_2_graphics)
     # if orb_attack_p1 == True:
