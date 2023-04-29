@@ -107,11 +107,11 @@ player_2 = PLAYER(2,1000,420)
 
 
 
-def draw_health(health,x,y):
+def draw_health(player_side,health,x,y):
     loss = health/100
     pygame.draw.rect(sky,'white',(x-2,y-2,504,34))
     pygame.draw.rect(sky,'red',(x,y,500,30))
-    pygame.draw.rect(sky,'green',(x,y,500 * loss,30))
+    pygame.draw.rect(sky,'green',(x + 500 * (player_side - loss) * player_side, y ,500 * loss,30))
 
 while True:
     for event in pygame.event.get():
@@ -124,8 +124,8 @@ while True:
     screen.blit(sky,(0,0))
     screen.blit(ground, (0, 550))
 
-    draw_health(player_1.health,20,20)
-    draw_health(player_2.health,680,20)
+    draw_health(0,player_1.health,20,20)
+    draw_health(1,player_2.health,680,20)
 
 
     player_1.update(player_2)
