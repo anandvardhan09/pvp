@@ -90,17 +90,17 @@ class PLAYER:
 
 pygame.init()
 screen = pygame.display.set_mode((1200, 600))
-ground = pygame.image.load("graphics/ground.jpeg").convert()
-sky = pygame.image.load("graphics/sky.png").convert()
+ground = pygame.image.load("../graphics/ground.jpeg").convert()
+sky = pygame.image.load("../graphics/sky.png").convert()
 clock = pygame.time.Clock()
 screen_update = pygame.USEREVENT
 pygame.time.set_timer(screen_update, 150)
 
-player_1_graphics = pygame.image.load("graphics/player1.png").convert_alpha()
-player_2_graphics = pygame.image.load("graphics/player2.png").convert_alpha()
-player_1_attack = pygame.image.load("graphics/player_1_knife.png").convert_alpha()
-player_2_attack = pygame.image.load("graphics/player_2_knife.png").convert_alpha()
-orb_graphics = pygame.image.load("graphics/rasengan.png").convert_alpha()
+player_1_graphics = pygame.image.load("../graphics/player1.png").convert_alpha()
+player_2_graphics = pygame.image.load("../graphics/player2.png").convert_alpha()
+player_1_attack = pygame.image.load("../graphics/player_1_knife.png").convert_alpha()
+player_2_attack = pygame.image.load("../graphics/player_2_knife.png").convert_alpha()
+orb_graphics = pygame.image.load("../graphics/rasengan.png").convert_alpha()
 
 player_1 = PLAYER(1,100,420)
 player_2 = PLAYER(2,1000,420)
